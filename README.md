@@ -14,5 +14,5 @@ Welcome to the Course Catalog Python project! This command-line search utility a
 To get started with the Course Catalog Python project, follow these steps:
 
 1. Clone the repository to your local machine.
-2. Install the required dependencies by running `pip install -r requirements.txt`.
-3. Run `python utc_course_catalog.py --help` to view command-line options.
+2. Run the install script (or `pip install -e .`)
+3. Run `pycatalog` to view command-line options.
