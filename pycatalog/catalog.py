@@ -41,17 +41,20 @@ def execute(args):
 
     nextInd = "y"
     try:
+        if args.output:
+            open(args.output, "w").close()
         for data in jsonResponse["data"]:
             course_info = format_course_data(data)
-            print(course_info)
             if args.output:
-                with open(args.output, "w") as f:
+                with open(args.output, "a") as f:
                     f.write(course_info)
-            if nextInd == "y":
-                nextInd = input("Would you like to see the next course? y/n/A: ")
-            elif nextInd == "n":
-                break
-            elif nextInd == "a":
-                continue
+            else:
+                print(course_info)
+                if nextInd == "y":
+                    nextInd = input("Would you like to see the next course? y/n/A: ")
+                elif nextInd == "n":
+                    break
+                elif nextInd == "a":
+                    continue
     except Exception as e:
         print(e, "\n Error, could not parse JSON response.")
