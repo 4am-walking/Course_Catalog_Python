@@ -83,7 +83,16 @@ def main():
         for i in range(len(jsonResponse["data"])):
             data = jsonResponse["data"][i]
             print(f"Course: {data['courseTitle']}")
+            print(f"CRN: {data['courseReferenceNumber']}")
+            print(f"Subject: {data['subjectDescription']}")
+            print(f"Course Number: {data['courseNumber']}")
+            try:
+                print(f"Professor: {data['faculty'][0]['displayName']}")
+                print(f"Professor Contact: {data['faculty'][0]['emailAddress']}")
+            except IndexError as e:
+                print("Professor: N/A or TBD")
             print(f"Seats available: {data['seatsAvailable']}")
+            print("---------------------------------------------------------")
             if nextInd == "Y" or nextInd == "y":
                 nextInd = input("Would you like to see the next course? y/n/A")
             elif nextInd == "N" or nextInd == "n":
