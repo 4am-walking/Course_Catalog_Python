@@ -4,8 +4,7 @@ staticParams = {
     "txt_partOfTerm": "1",
     "startDatepicker": "",
     "endDatepicker": "",
-    "pageOffset": "0",
-    "pageMaxSize": "1000",
+    "pageMaxSize": 500,
     "sortColumn": "subjectDescription",
     "sortDirection": "asc",
 }
@@ -16,8 +15,9 @@ def build_url(baseURL, params):
     return f"{baseURL}?{urllib.parse.urlencode(queryParams)}"
 
 
-def get_dynamic_params(args):
+def get_dynamic_params(args, pageoffset=0):
     dynamicParams = {
+        "pageOffset": pageoffset,
         "txt_subject": args.subject,
         "txt_courseNumber": args.number,
         "txt_keywordlike": args.keyword,

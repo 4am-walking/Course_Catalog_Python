@@ -1,0 +1,7 @@
+*notes
+*env
+*__pycache__
+*.vscode
+build
+tests
+*.egg-info

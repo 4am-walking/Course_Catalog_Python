@@ -1,4 +1,5 @@
 import requests
+
 from pycatalog.config import get_dynamic_params
 
 
@@ -34,27 +35,42 @@ def execute(args):
         pilotURL, headers=session.headers, cookies=session.cookies, data=pilotData
     )
 
-    jsonURL = get_dynamic_params(args)
-    jsonResponse = requests.get(
-        jsonURL, headers=session.headers, cookies=session.cookies
-    ).json()
-
+    pageoffset = 0
     nextInd = "y"
     try:
         if args.output:
             open(args.output, "w").close()
-        for data in jsonResponse["data"]:
-            course_info = format_course_data(data)
-            if args.output:
-                with open(args.output, "a") as f:
-                    f.write(course_info)
-            else:
-                print(course_info)
-                if nextInd == "y":
-                    nextInd = input("Would you like to see the next course? y/n/A: ")
-                elif nextInd == "n":
-                    break
-                elif nextInd == "a":
-                    continue
+        print("Fetching courses... This may take a while.")
+
+        while True:
+            jsonURL = get_dynamic_params(args, pageoffset)
+            response = requests.get(
+                jsonURL, headers=session.headers, cookies=session.cookies
+            )
+            if response.status_code != 200:
+                print(f"Error: Received status code {response.status_code}")
+                break
+
+            jsonResponse = response.json()
+            if not jsonResponse.get("data"):
+                print("No more courses found.")
+                break
+            for data in jsonResponse["data"]:
+                course_info = format_course_data(data)
+                if args.output:
+                    with open(args.output, "a") as f:
+                        f.write(course_info + "\n")
+                else:
+                    print(course_info)
+                    if nextInd == "y":
+                        nextInd = input(
+                            "Would you like to see the next course? y/n/A: "
+                        )
+                    elif nextInd == "n":
+                        return
+                    elif nextInd == "a":
+                        nextInd = "a"
+
+            pageoffset += 500
     except Exception as e:
         print(e, "\n Error, could not parse JSON response.")
